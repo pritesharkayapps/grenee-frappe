@@ -14,7 +14,7 @@ def login(email, password):
 
     try:
         frappe.local.login_manager.authenticate(email, password)
-        
+
         user_details = frappe.get_doc("User", email)
         api_secret = frappe.generate_hash(length=15)
 
@@ -55,13 +55,16 @@ def current_user():
     try:
         user_doc = frappe.get_doc("User", frappe.session.user)
 
+        if user_doc.user_image and not user_doc.user_image.startswith(
+            ("http://", "https://")
+        ):
+            user_doc.user_image = f"{base_url}{user_doc.user_image}"
+
         selected_fields = {
             "email": user_doc.email,
             "full_name": user_doc.full_name,
             "number": user_doc.mobile_no,
-            "user_image": (
-                f"{base_url}{user_doc.user_image}" if user_doc.user_image else None
-            ),
+            "user_image": user_doc.user_image,
         }
 
         data = {
@@ -92,6 +95,8 @@ def get_user_slot_status():
                 title="Unauthorized Access",
             )
 
+        slot = frappe.get_doc("Slot")
+
         user_slot = frappe.get_value(
             "User Slot",
             {"user": frappe.session.user},
@@ -104,10 +109,19 @@ def get_user_slot_status():
                 ("No user slot found for the current user."), title="No Slot Found"
             )
 
-        return (
-            "Open"
-            if user_slot.get("slot") == "Open" or user_slot.get("force_open")
-            else "Closed"
+        status = ""
+
+        if user_slot.get("slot") == "Open" or user_slot.get("force_open"):
+            status = "Open"
+        else:
+            status = "Closed"
+
+        data = {"status": status, "slot": slot.as_dict()}
+
+        return Response(
+            json.dumps(data, cls=helper.CustomJSONEncoder),
+            content_type="application/json",
+            status=200,
         )
     except Exception as e:
         data = {"success": False, "message": str(e)}

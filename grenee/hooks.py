@@ -122,13 +122,16 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
+doc_events = {
+    "User": {
+        "before_save": "grenee.hooks.add_user_slot"
+    },
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
 # 	}
-# }
+}
 
 # Scheduled Tasks
 # ---------------
@@ -224,7 +227,6 @@ scheduler_events = {
 # }
 
 fixtures = [
-    "Server Script",
     "Workflow Action",
     "Workflow State",
     "Workflow",
@@ -238,4 +240,40 @@ fixtures = [
         "filters": [["name", "in", ["Grenee Admin", "Franchise User"]]],
     },
     {"dt": "Workspace", "filters": [["name", "=", "Grenee"]]},
+    {"dt": "Property Setter", "filters": [["name", "like", "%naming_series%"]]},
+
+    {"dt": "Custom DocPerm", "filters": [["role", "in", ["Grenee Admin", "Franchise User"]]]},
+    "Custom Role",
 ]
+
+import frappe
+from frappe.utils import now_datetime
+from datetime import datetime
+
+def add_user_slot(doc,methods):
+    user_slot = frappe.get_all("User Slot", filters={"user": doc.name}, limit=1)
+
+    if doc.role_profile_name == "Franchise User":
+        if not user_slot:
+            current_time = now_datetime().time().replace(microsecond=0)
+            
+            get_slot = frappe.get_doc("Slot")
+            start_time = datetime.strptime(get_slot.start_time, "%H:%M:%S").time()
+            end_time = datetime.strptime(get_slot.end_time, "%H:%M:%S").time()
+            slot = "Open" if start_time < current_time < end_time else "Closed"
+
+            user_slot_doc = frappe.get_doc({
+                "doctype": "User Slot",
+                "user": doc.name,
+                "slot": slot
+            })
+            user_slot_doc.insert()
+            user_slot_doc.submit()
+    else:
+        if user_slot:
+            user_slot_name = user_slot[0].name
+            user_slot_doc = frappe.get_doc("User Slot", user_slot_name)
+            if user_slot_doc.docstatus == 1:
+                user_slot_doc.cancel()
+            frappe.delete_doc("User Slot", user_slot_name)
+

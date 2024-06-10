@@ -112,16 +112,6 @@ def get_order(id):
         if order.user != frappe.session.user:
             frappe.throw("You are not the owner of this Order.")
 
-        user_slot = frappe.get_value(
-            "User Slot",
-            {"user": frappe.session.user},
-            ["slot", "force_open"],
-            as_dict=True,
-        )
-
-        if user_slot.get("slot") == "Closed" and user_slot.get("force_open") == False:
-            frappe.throw("ORDER SLOTS CLOSED")
-
         order_dict = order.as_dict()
 
         for item in order_dict.order_items:
