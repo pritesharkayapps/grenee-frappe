@@ -230,11 +230,6 @@ fixtures = [
     "Workflow",
     "Report",
     {
-        "dt": "DocType",
-        "filters": [["name", "=", "User"]],
-    },
-    {"dt": "User", "filters": [["name", "not in", ["Administrator", "Guest"]]]},
-    {
         "dt": "Role",
         "filters": [["name", "in", ["Grenee Admin", "Franchise User"]]],
     },
