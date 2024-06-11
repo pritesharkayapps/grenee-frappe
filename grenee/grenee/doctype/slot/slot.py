@@ -23,26 +23,30 @@ def update_user_slot():
     count_closed_slot = frappe.db.count("User Slot", filters={"slot": "Closed"})
 
     if start_time < end_time:
-        if (start_time <= current_time < end_time) and count_closed_slot > 0:
+        print("open_slot",count_open_slot)
+        print("count_closed_slot",count_closed_slot)
+        print((start_time <= current_time < end_time) and count_open_slot > 0)
+
+        if (start_time <= current_time < end_time):
             slots = frappe.get_all("User Slot", filters={"slot": "Closed"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
                 user_slot.slot = "Open"
                 user_slot.save()
-        elif count_open_slot > 0:
+        else:
             slots = frappe.get_all("User Slot", filters={"slot": "Open"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
                 user_slot.slot = "Closed"
                 user_slot.save()
     else:
-        if (start_time <= current_time or current_time < end_time) and count_closed_slot > 0:
+        if (start_time <= current_time or current_time < end_time):
             slots = frappe.get_all("User Slot", filters={"slot": "Closed"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
                 user_slot.slot = "Open"
                 user_slot.save()
-        elif count_open_slot > 0:
+        else:
             slots = frappe.get_all("User Slot", filters={"slot": "Open"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
