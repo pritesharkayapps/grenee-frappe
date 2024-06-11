@@ -40,11 +40,10 @@ def execute(filters=None):
 
     datas = []
 
-    # invoices = frappe.get_all("Invoice",filters={"order_date_time":['in',]})
     for item in items:
         order_items = frappe.get_all(
-            "Invoice Items",
-            filters={"item": item.name, "parenttype": "Invoice", "docstatus": 1},
+            "Order Items",
+            filters={"item": item.name, "parenttype": "Order", "docstatus": 1},
             fields=["ordered_qty", "amount"],
         )
 

@@ -29,8 +29,8 @@ def execute(filters=None):
         end_datetime = datetime.combine(date, datetime.max.time())
         
         invoices = frappe.get_all(
-            "Invoice",
-            filters={"invoice_date_time": ["between", [start_datetime, end_datetime]]},
+            "Order",
+            filters={"order_date_time": ["between", [start_datetime, end_datetime]]},
             fields=["total_amount"]
         )
 

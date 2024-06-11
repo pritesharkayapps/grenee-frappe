@@ -35,7 +35,7 @@ def execute(filters=None):
 
     for franchise_user in franchise_users:
         invoices = frappe.get_all(
-            "Invoice",
+            "Order",
             filters={"user": franchise_user.name, "docstatus": 1},
             fields=["*"]
         )

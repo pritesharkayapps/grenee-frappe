@@ -11,6 +11,8 @@ def place_order(**kwargs):
     payload = frappe.parse_json(kwargs)
 
     try:
+        # frappe.throw("ORDER SLOTS CLOSED")
+
         user_slot = frappe.get_value(
             "User Slot",
             {"user": frappe.session.user},
@@ -138,20 +140,28 @@ def get_order(id):
         return response
 
 
-@frappe.whitelist(methods="PUT")
+@frappe.whitelist(methods="POST")
 def update_order(id, **kwargs):
-    try:
-        payload = frappe.parse_json(kwargs)
+    payload = frappe.parse_json(kwargs)
 
+    try:
         order = frappe.get_doc("Order", id)
 
         if order.user != frappe.session.user:
             frappe.throw("You are not the owner of this order.")
 
+        user_slot = frappe.get_value(
+            "User Slot",
+            {"user": frappe.session.user},
+            ["slot", "force_open"],
+            as_dict=True,
+        )
+
+        if user_slot.get("slot") == "Closed" and user_slot.get("force_open") == False:
+            frappe.throw("ORDER SLOTS CLOSED")
+
         order.order_items = []
-
         order_items, total_amount = get_order_items_and_total(payload.get("items", []))
-
         order.total_amount = total_amount
 
         for item in order_items:

@@ -18,6 +18,7 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "columns": 2,
    "fieldname": "item",
    "fieldtype": "Link",
@@ -28,6 +29,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fetch_from": "item.lot_qty",
    "fieldname": "lot_qty",
@@ -39,6 +41,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "ordered_qty",
    "fieldtype": "Int",
@@ -47,6 +50,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 2,
    "fieldname": "category",
    "fieldtype": "Link",
@@ -56,6 +60,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fetch_from": "item.max_qty",
    "fieldname": "max_qty",
@@ -67,6 +72,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fetch_from": "item.price_per_unit",
    "fieldname": "rate",
@@ -78,6 +84,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "amount",
    "fieldtype": "Float",
@@ -88,6 +95,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fetch_from": "item.min_qty",
    "fieldname": "min_qty",
@@ -99,19 +107,21 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "item.unit",
    "fieldname": "unit",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Unit",
    "options": "Unit",
+   "read_only": 1,
    "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-05-29 17:47:21.230095",
+ "modified": "2024-06-11 10:21:50.904754",
  "modified_by": "Administrator",
  "module": "Grenee",
  "name": "Order Items",
