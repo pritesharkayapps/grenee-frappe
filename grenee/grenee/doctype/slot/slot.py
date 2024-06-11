@@ -22,27 +22,22 @@ def update_user_slot():
     count_open_slot = frappe.db.count("User Slot", filters={"slot": "Open"})
     count_closed_slot = frappe.db.count("User Slot", filters={"slot": "Closed"})
 
-    if start_time < end_time:
-        if (start_time <= current_time < end_time) and count_closed_slot > 0:
+    try:
+        if (
+            current_time >= start_time
+            and current_time <= end_time
+            and count_closed_slot > 0
+        ):
             slots = frappe.get_all("User Slot", filters={"slot": "Closed"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
                 user_slot.slot = "Open"
                 user_slot.save()
-        elif count_open_slot > 0:
-            slots = frappe.get_all("User Slot", filters={"slot": "Open"})
-            for slot in slots:
-                user_slot = frappe.get_doc("User Slot", slot.name)
-                user_slot.slot = "Closed"
-                user_slot.save()
-    else:
-        if (start_time <= current_time or current_time < end_time) and count_closed_slot > 0:
-            slots = frappe.get_all("User Slot", filters={"slot": "Closed"})
-            for slot in slots:
-                user_slot = frappe.get_doc("User Slot", slot.name)
-                user_slot.slot = "Open"
-                user_slot.save()
-        elif count_open_slot > 0:
+        elif (
+            current_time >= end_time
+            and current_time >= start_time
+            and count_open_slot > 0
+        ):
             slots = frappe.get_all("User Slot", filters={"slot": "Open"})
             for slot in slots:
                 user_slot = frappe.get_doc("User Slot", slot.name)
@@ -50,6 +45,9 @@ def update_user_slot():
                 user_slot.save()
 
         frappe.db.commit()
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), f"Error in update_user_slot: {str(e)}")
+        frappe.db.rollback()
 
 
 def update_order_status():
