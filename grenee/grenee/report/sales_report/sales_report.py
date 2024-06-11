@@ -30,7 +30,7 @@ def execute(filters=None):
         
         invoices = frappe.get_all(
             "Order",
-            filters={"order_date_time": ["between", [start_datetime, end_datetime]]},
+            filters={"order_date_time": ["between", [start_datetime, end_datetime]],'docstatus':1},
             fields=["total_amount"]
         )
 

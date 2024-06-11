@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('Order', {
     refresh(frm) {
-        if (frm.doc.workflow_state == "Confirmed") {
+        if (frm.doc.workflow_state == "Confirmed" || frm.doc.workflow_state == "Closed") {
             frm.add_custom_button(__('Generate Invoice'), function () {
                 frappe.call({
                     method: 'frappe.client.insert',
