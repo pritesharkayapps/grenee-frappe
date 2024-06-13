@@ -2,32 +2,35 @@
 # For license information, please see license.txt
 
 import frappe
-from datetime import datetime,date
+from frappe import _
+from datetime import datetime,timedelta
 
 
 def execute(filters=None):
-    inv_filters = {}
+    if not filters:
+        filters = {}
 
-    start_date_str = filters.get("from_date")
-    end_date_str = filters.get("to_date")
-
-    if start_date_str and end_date_str:
-        start_date = date.fromisoformat(start_date_str)
-        end_date = date.fromisoformat(end_date_str)
-
-        start_datetime = datetime.combine(start_date, datetime.min.time())
-        end_datetime = datetime.combine(end_date, datetime.max.time())
-
-        inv_filters["invoice_date_time"] = ["between", [start_datetime, end_datetime]]
-
-    if filters.get("user"):
-        inv_filters["user"] = filters.get("user")
+    from_date = filters.get("from_date")
+    to_date = filters.get("to_date")
 
     columns = get_columns()
     data = []
 
+    inv_filters = {"docstatus": 1}
+
+    if from_date and to_date:
+        inv_filters["invoice_date_time"] = ["between", [from_date, to_date]]
+    elif from_date:
+        inv_filters["invoice_date_time"] = [">=", from_date]
+    elif to_date:
+        to_date_end_of_day = datetime.strptime(to_date, '%Y-%m-%d') + timedelta(days=1) - timedelta(seconds=1)
+        inv_filters["invoice_date_time"] = ["<=", to_date_end_of_day.strftime('%Y-%m-%d %H:%M:%S')]
+
+    if filters.get('user'):
+        inv_filters["user"] = filters.get('user')
+
     invoices = frappe.get_all(
-        "Invoice",
+        "Invoice",  
         filters=inv_filters,
         fields=["*"],
     )

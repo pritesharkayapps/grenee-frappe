@@ -1,58 +1,62 @@
 import frappe
-from datetime import datetime, timedelta
+from frappe import _
+
 
 def execute(filters=None):
     if not filters:
         filters = {}
 
-    start_date_str = filters.get("from_date")
-    end_date_str = filters.get("to_date")
+    from_date = filters.get("from_date")
+    to_date = filters.get("to_date")
 
-    if not start_date_str or not end_date_str:
-        frappe.throw("Please specify both 'from_date' and 'to_date' filters.")
-
-    start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-    end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-
-    # Ensure start_date is not after end_date
-    if start_date > end_date:
-        frappe.throw("'from_date' cannot be after 'to_date'.")
-
-    columns = get_columns()
-
-    date_list = generate_date_list(start_date, end_date)
-
-    data = []
-
-    for date in date_list:
-        start_datetime = datetime.combine(date, datetime.min.time())
-        end_datetime = datetime.combine(date, datetime.max.time())
-        
-        invoices = frappe.get_all(
-            "Order",
-            filters={"order_date_time": ["between", [start_datetime, end_datetime]],'docstatus':1},
-            fields=["total_amount"]
-        )
-
-        total_amount = sum(float(invoice.get("total_amount", 0)) for invoice in invoices)
-        
-        data.append(
-            {
-                "date": date,
-                "no_of_orders": len(invoices),
-                "total_amount": total_amount
-            }
-        )
-
-    return columns, data
-
-def get_columns():
-    return [
-        {"fieldname": "date", "label": "Date", "fieldtype": "Date", "width": 120},
-        {"fieldname": "no_of_orders", "label": "Number of Orders", "fieldtype": "Int", "width": 150},
-        {"fieldname": "total_amount", "label": "Total Amount", "fieldtype": "Float", "width": 150},
+    columns = [
+        {
+            "fieldname": "order_date",
+            "label": "<b>" + _("Order Date") + "</b>",
+            "fieldtype": "Date",
+            "width": 150,
+        },
+        {
+            "fieldname": "no_of_orders",
+            "label": "<b>" + _("No of Orders") + "</b>",
+            "fieldtype": "Int",
+            "width": 125,
+        },
+        {
+            "fieldname": "total_amount",
+            "label": "<b>" + _("Total Amount") + "</b>",
+            "fieldtype": "Float",
+            "width": 125,
+        },
     ]
 
-def generate_date_list(start_date, end_date):
-    delta = end_date - start_date
-    return [start_date + timedelta(days=i) for i in range(delta.days + 1)]
+    # Prepare SQL conditions for date filters
+    conditions = []
+    if from_date:
+        conditions.append("o.order_date_time >= %(from_date)s")
+    if to_date:
+        conditions.append("o.order_date_time < DATE_ADD(%(to_date)s, INTERVAL 1 DAY)")
+
+    conditions_str = " AND ".join(conditions)
+
+    # Construct SQL query
+    query = f"""
+        SELECT 
+            DATE(o.order_date_time) as order_date,
+            COUNT(o.name) as no_of_orders,
+            SUM(o.total_amount) as total_amount
+        FROM 
+            `tabOrder` o
+        WHERE 
+            o.workflow_state IN ('Confirmed', 'Closed')
+            {f"AND {conditions_str}" if conditions_str else ""}
+        GROUP BY 
+            DATE(o.order_date_time)
+        ORDER BY 
+            DATE(o.order_date_time)
+    """
+
+    # Execute SQL query
+    result = frappe.db.sql(query, filters, as_dict=True)
+
+    return columns, result

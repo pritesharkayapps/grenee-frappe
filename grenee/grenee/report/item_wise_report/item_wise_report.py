@@ -2,64 +2,83 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
+from datetime import datetime,timedelta
 
 
 def execute(filters=None):
+    if not filters:
+        filters = {}
+
     from_date = filters.get("from_date")
     to_date = filters.get("to_date")
 
     columns = [
         {
             "fieldname": "item",
-            "label": ("Item"),
+            "label": "<b>" + _("Item") + "</b>",
             "fieldtype": "Data",
             "width": 125,
         },
         {
             "fieldname": "unit",
-            "label": ("Unit"),
+            "label": "<b>" + _("Unit") + "</b>",
             "fieldtype": "Link",
             "options": "Unit",
             "width": 125,
         },
         {
             "fieldname": "total_sold_qty",
-            "label": ("Total Sold Qty"),
+            "label": "<b>" + _("Total Sold Qty") + "</b>",
             "fieldtype": "Int",
             "width": 125,
         },
         {
-            "fieldname": "total_price",
-            "label": ("Total Price"),
+            "fieldname": "total_amount",
+            "label": "<b>" + _("Total Amount") + "</b>",
             "fieldtype": "Float",
             "width": 125,
         },
     ]
 
-    items = frappe.get_all("Item", filters={"disabled": False}, fields=["*"])
+    order_filters = {"workflow_state": ["in", ["Confirmed", "Closed"]]}
 
-    datas = []
+    if from_date and to_date:
+        order_filters["order_date_time"] = ["between", [from_date, to_date]]
+    elif from_date:
+        order_filters["order_date_time"] = [">=", from_date]
+    elif to_date:
+        to_date_end_of_day = datetime.strptime(to_date, '%Y-%m-%d') + timedelta(days=1) - timedelta(seconds=1)
+        order_filters["order_date_time"] = ["<=", to_date_end_of_day.strftime('%Y-%m-%d %H:%M:%S')]
 
-    for item in items:
-        order_items = frappe.get_all(
-            "Order Items",
-            filters={"item": item.name, "parenttype": "Order", "docstatus": 1},
-            fields=["ordered_qty", "amount"],
-        )
+    orders = frappe.get_all(
+        "Order",
+        filters=order_filters,
+        pluck="name",
+    )
 
-        sold_qty = 0
-        sold_amount = 0
-        for order_item in order_items:
-            sold_qty += order_item["ordered_qty"]
-            sold_amount += order_item["amount"]
+    if not orders:
+        return columns, []
 
-        datas.append(
-            {
-                "item": item.item_name,
-                "total_sold_qty": sold_qty,
-                "unit": item.unit,
-                "total_price": sold_amount,
-            }
-        )
+    query = """
+        SELECT 
+            oi.item,
+            i.unit,
+            SUM(ordered_qty) as total_sold_qty,
+            SUM(amount) as total_amount
+        FROM 
+            `tabOrder Items` oi
+        JOIN 
+            `tabItem` i ON oi.item = i.name
+        WHERE 
+            parenttype = 'Order' AND
+            parent IN (%s)
+        GROUP BY 
+            item
+    """ % ",".join(
+        ["%s"] * len(orders)
+    )
 
-    return columns, datas
+    result = frappe.db.sql(query, tuple(orders), as_dict=True)
+
+    return columns, result

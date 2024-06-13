@@ -2,54 +2,83 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
+from datetime import datetime, timedelta
 
 
 def execute(filters=None):
+    if not filters:
+        filters = {}
+
     from_date = filters.get("from_date")
     to_date = filters.get("to_date")
 
     columns = [
         {
             "fieldname": "franchise_name",
-            "label": ("Franchise Name"),
+            "label": "<b>"+_('Franchise Name')+"</b>",
             "fieldtype": "Data",
             "width": 150,
         },
         {
             "fieldname": "no_of_orders",
-            "label": ("No of Orders"),
+            "label": "<b>"+_('No of Orders')+"</b>",
             "fieldtype": "Int",
             "width": 125,
         },
         {
             "fieldname": "total_amount",
-            "label": ("Total Amount"),
+            "label": "<b>"+_('Total Amount')+"</b>",
             "fieldtype": "Float",
             "width": 125,
         },
     ]
 
-    franchise_users = frappe.get_all("User", filters={"role_profile_name":'Franchise User'}, fields=["*"])
+    conditions = []
+    params = {}
 
-    datas = []
-
-    for franchise_user in franchise_users:
-        invoices = frappe.get_all(
-            "Order",
-            filters={"user": franchise_user.name, "docstatus": 1},
-            fields=["*"]
+    if from_date and to_date:
+        to_date_end_of_day = (
+            datetime.strptime(to_date, "%Y-%m-%d")
+            + timedelta(days=1)
+            - timedelta(seconds=1)
         )
-
-        total_amount = 0
-        for invoice in invoices:
-            total_amount += invoice.total_amount
-
-        datas.append(
-            {
-                "franchise_name": franchise_user.full_name,
-                "no_of_orders": len(invoices),
-                "total_amount": total_amount,
-            }
+        conditions.append(
+            "o.order_date_time BETWEEN %(from_date)s AND %(to_date_end_of_day)s"
         )
+        params["from_date"] = from_date
+        params["to_date_end_of_day"] = to_date_end_of_day.strftime("%Y-%m-%d %H:%M:%S")
+    elif from_date:
+        conditions.append("o.order_date_time >= %(from_date)s")
+        params["from_date"] = from_date
+    elif to_date:
+        to_date_end_of_day = (
+            datetime.strptime(to_date, "%Y-%m-%d")
+            + timedelta(days=1)
+            - timedelta(seconds=1)
+        )
+        conditions.append("o.order_date_time <= %(to_date_end_of_day)s")
+        params["to_date_end_of_day"] = to_date_end_of_day.strftime("%Y-%m-%d %H:%M:%S")
 
-    return columns, datas
+    conditions_str = " AND ".join(conditions)
+
+    query = f"""
+        SELECT 
+            u.full_name as franchise_name,
+            COUNT(o.name) as no_of_orders,
+            SUM(o.total_amount) as total_amount
+        FROM 
+            `tabOrder` o
+        JOIN 
+            `tabUser` u ON o.user = u.name
+        WHERE 
+            o.workflow_state IN ('Confirmed', 'Closed')
+            AND u.role_profile_name = 'Franchise User'
+            {f"AND {conditions_str}" if conditions_str else ""}
+        GROUP BY 
+            u.full_name
+    """
+
+    result = frappe.db.sql(query, params, as_dict=True)
+
+    return columns, result

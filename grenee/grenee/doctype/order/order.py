@@ -29,7 +29,7 @@ class Order(Document):
     def before_save(self):
         india_tz = pytz.timezone('Asia/Kolkata')
         now_in_india = datetime.now(india_tz)
-        self.order_date_time = now_in_india.strftime('%Y-%m-%d %H:%M:%S')
+        # self.order_date_time = now_in_india.strftime('%Y-%m-%d %H:%M:%S')
 
         user_slot = frappe.get_value("User Slot", {"user": self.user}, "slot")
         force_open = frappe.get_value("User Slot", {"user": self.user}, "force_open")

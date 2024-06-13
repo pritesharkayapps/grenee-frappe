@@ -124,7 +124,7 @@ app_license = "mit"
 
 doc_events = {
     "User": {
-        "before_save": "grenee.hooks.add_user_slot"
+        "on_update": "grenee.hooks.add_user_slot"
     },
 # 	"*": {
 # 		"on_update": "method",
