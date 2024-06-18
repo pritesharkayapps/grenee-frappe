@@ -124,13 +124,14 @@ app_license = "mit"
 
 doc_events = {
     "User": {
-        "on_update": "grenee.hooks.add_user_slot"
+        "after_insert": "grenee.hooks.add_user_slot",
+        "on_update": "grenee.hooks.update_user_slots"
     },
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
+    # 	"*": {
+    # 		"on_update": "method",
+    # 		"on_cancel": "method",
+    # 		"on_trash": "method"
+    # 	}
 }
 
 # Scheduled Tasks
@@ -158,9 +159,10 @@ scheduler_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "grenee.event.get_events"
-# }
+override_whitelisted_methods = {
+    # "frappe.desk.reportview.get_list": "grenee.user.user_get_list",
+    # "frappe.desk.doctype.event.event.get_events": "grenee.event.get_events"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -241,39 +243,54 @@ fixtures = [
     },
     {"dt": "Workspace", "filters": [["name", "=", "Grenee"]]},
     {"dt": "Property Setter", "filters": [["name", "like", "%naming_series%"]]},
-
-    {"dt": "Custom DocPerm", "filters": [["role", "in", ["Grenee Admin", "Franchise User"]]]},
+    {
+        "dt": "Custom DocPerm",
+        "filters": [["role", "in", ["Grenee Admin", "Franchise User"]]],
+    },
     "Custom Role",
+    "Server Script",
 ]
 
 import frappe
 from frappe.utils import now_datetime
 from datetime import datetime
 
-def add_user_slot(doc,methods):
-    user_slot = frappe.get_all("User Slot", filters={"user": doc.name}, limit=1)
+def add_user_slot(doc, methods):
+    if doc.role_profile_name == "Franchise User":
+        current_time = now_datetime().time().replace(microsecond=0)
+
+        get_slot = frappe.get_doc("Slot")
+        start_time = datetime.strptime(get_slot.start_time, "%H:%M:%S").time()
+        end_time = datetime.strptime(get_slot.end_time, "%H:%M:%S").time()
+        slot = "Open" if start_time < current_time < end_time else "Closed"
+
+        user_slot_doc = frappe.get_doc(
+            {"doctype": "User Slot", "user": doc.name, "slot": slot}
+        )
+        user_slot_doc.insert()
+        user_slot_doc.submit()
+
+
+def update_user_slots(doc, method):
+    user_slot_name = frappe.get_value("User Slot", {"user": doc.name}, "name")
 
     if doc.role_profile_name == "Franchise User":
-        if not user_slot:
+        if not user_slot_name:
             current_time = now_datetime().time().replace(microsecond=0)
-            
-            get_slot = frappe.get_doc("Slot")
+
+            get_slot = frappe.get_doc("Slot", {"status": "Open"})
             start_time = datetime.strptime(get_slot.start_time, "%H:%M:%S").time()
             end_time = datetime.strptime(get_slot.end_time, "%H:%M:%S").time()
             slot = "Open" if start_time < current_time < end_time else "Closed"
 
-            user_slot_doc = frappe.get_doc({
-                "doctype": "User Slot",
-                "user": doc.name,
-                "slot": slot
-            })
+            user_slot_doc = frappe.get_doc(
+                {"doctype": "User Slot", "user": doc.name, "slot": slot}
+            )
             user_slot_doc.insert()
             user_slot_doc.submit()
     else:
-        if user_slot:
-            user_slot_name = user_slot[0].name
+        if user_slot_name:
             user_slot_doc = frappe.get_doc("User Slot", user_slot_name)
             if user_slot_doc.docstatus == 1:
                 user_slot_doc.cancel()
             frappe.delete_doc("User Slot", user_slot_name)
-

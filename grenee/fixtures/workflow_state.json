@@ -48,18 +48,18 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2024-05-20 10:04:36.847234",
-  "name": "Confirmed",
-  "style": "",
-  "workflow_state_name": "Confirmed"
+  "modified": "2024-05-20 10:00:21.119416",
+  "name": "Open",
+  "style": "Primary",
+  "workflow_state_name": "Open"
  },
  {
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2024-05-20 10:00:21.119416",
-  "name": "Open",
-  "style": "Primary",
-  "workflow_state_name": "Open"
+  "modified": "2024-05-20 10:04:36.847234",
+  "name": "Confirmed",
+  "style": "",
+  "workflow_state_name": "Confirmed"
  }
 ]

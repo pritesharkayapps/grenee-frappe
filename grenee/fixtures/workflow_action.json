@@ -1,6 +1,303 @@
 [
  {
   "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:54:10.645696",
+  "name": "54paes9mi9",
+  "permitted_roles": [
+   {
+    "parent": "54paes9mi9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0011",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Open"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:54:18.871755",
+  "name": "54rsn7a4v9",
+  "permitted_roles": [
+   {
+    "parent": "54rsn7a4v9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0012",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Open"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:54:42.933071",
+  "name": "553d2q0ik2",
+  "permitted_roles": [
+   {
+    "parent": "553d2q0ik2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0013",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Open"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:56:03.502058",
+  "name": "55sjp9r6ob",
+  "permitted_roles": [
+   {
+    "parent": "55sjp9r6ob",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   },
+   {
+    "parent": "55sjp9r6ob",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0013",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Confirmed"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:56:03.558811",
+  "name": "55sjj7fel4",
+  "permitted_roles": [
+   {
+    "parent": "55sjj7fel4",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   },
+   {
+    "parent": "55sjj7fel4",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0012",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Confirmed"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 17:56:03.597056",
+  "name": "55sjvgubut",
+  "permitted_roles": [
+   {
+    "parent": "55sjvgubut",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   },
+   {
+    "parent": "55sjvgubut",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0011",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Confirmed"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 18:01:22.539640",
+  "name": "5909frblj3",
+  "permitted_roles": [
+   {
+    "parent": "5909frblj3",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0013",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Closed"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 18:01:22.641618",
+  "name": "590aa654gb",
+  "permitted_roles": [
+   {
+    "parent": "590aa654gb",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0012",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Closed"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-11 18:01:22.703814",
+  "name": "590br5rk4g",
+  "permitted_roles": [
+   {
+    "parent": "590br5rk4g",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0011",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Closed"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-12 11:20:29.022795",
+  "name": "o9ri8vfpes",
+  "permitted_roles": [
+   {
+    "parent": "o9ri8vfpes",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0014",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Open"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-12 11:24:38.185804",
+  "name": "oc9dd5qe8r",
+  "permitted_roles": [
+   {
+    "parent": "oc9dd5qe8r",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   },
+   {
+    "parent": "oc9dd5qe8r",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0014",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Confirmed"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-12 11:26:38.361988",
+  "name": "odevh39ont",
+  "permitted_roles": [
+   {
+    "parent": "odevh39ont",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0014",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Closed"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Guest",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-12 11:28:44.716807",
+  "name": "oemfrl63g2",
+  "permitted_roles": [
+   {
+    "parent": "oemfrl63g2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0015",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Open"
+ },
+ {
+  "completed_by": "Administrator",
   "completed_by_role": "All",
   "docstatus": 0,
   "doctype": "Workflow Action",
@@ -457,5 +754,32 @@
   "status": "Open",
   "user": null,
   "workflow_state": "Closed"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-06-14 13:01:58.124066",
+  "name": "esqdevb1o8",
+  "permitted_roles": [
+   {
+    "parent": "esqdevb1o8",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   },
+   {
+    "parent": "esqdevb1o8",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Guest"
+   }
+  ],
+  "reference_doctype": "Order",
+  "reference_name": "ORD-priteshkerai@gmail.com-0015",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Confirmed"
  }
 ]

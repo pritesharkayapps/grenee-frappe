@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Insert",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2024-06-14 12:00:30.221809",
+  "module": "Grenee",
+  "name": "Get Franchise User",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "User",
+  "script": "user = frappe.session.user\nif user == \"grenee@gmail.com\" :\n   conditions = \"`tabUser`.`role_profile_name`='Franchise User'\"\nelse:\n    pass",
+  "script_type": "Permission Query"
+ }
+]

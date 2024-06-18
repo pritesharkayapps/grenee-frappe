@@ -2,15 +2,22 @@
  {
   "docstatus": 0,
   "doctype": "Role Profile",
-  "modified": "2024-06-01 12:32:25.748778",
+  "modified": "2024-06-14 10:58:30.641150",
   "name": "Grenee Admin",
   "role_profile": "Grenee Admin",
-  "roles": []
+  "roles": [
+   {
+    "parent": "Grenee Admin",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "Grenee Admin"
+   }
+  ]
  },
  {
   "docstatus": 0,
   "doctype": "Role Profile",
-  "modified": "2024-06-01 17:58:32.521152",
+  "modified": "2024-06-14 10:58:35.935220",
   "name": "Franchise User",
   "role_profile": "Franchise User",
   "roles": [
