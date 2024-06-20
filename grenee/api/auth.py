@@ -86,14 +86,12 @@ def current_user():
 @frappe.whitelist(methods="GET")
 def get_user_slot_status():
     try:
-        if (
-            frappe.get_value("User", frappe.session.user, "role_profile_name")
-            != "Franchise User"
-        ):
-            frappe.throw(
-                ("You are not authorized to access this resource."),
-                title="Unauthorized Access",
-            )
+        role_profile_name = frappe.get_value(
+            "User", frappe.session.user, "role_profile_name"
+        )
+        if role_profile_name != "Franchise User":
+            error_message = "You are not authorized to access this resource."
+            frappe.throw(error_message, title="Unauthorized Access")
 
         slot = frappe.get_doc("Slot")
 
@@ -103,11 +101,10 @@ def get_user_slot_status():
             ["slot", "force_open"],
             as_dict=True,
         )
-
+        
         if not user_slot:
-            frappe.throw(
-                ("No user slot found for the current user."), title="No Slot Found"
-            )
+            error_message = "Sorry, there are no available slots for the current user."
+            frappe.throw(error_message, title="No Slot Found")
 
         status = ""
 
@@ -117,6 +114,34 @@ def get_user_slot_status():
             status = "Closed"
 
         data = {"status": status, "slot": slot.as_dict()}
+
+        return Response(
+            json.dumps(data, cls=helper.CustomJSONEncoder),
+            content_type="application/json",
+            status=200,
+        )
+    except Exception as e:
+        data = {"success": False, "message": str(e)}
+        return Response(json.dumps(data), content_type="application/json", status=500)
+
+
+@frappe.whitelist(methods="GET")
+def get_user_slot():
+    try:
+        role_profile_name = frappe.get_value(
+            "User", frappe.session.user, "role_profile_name"
+        )
+        if role_profile_name != "Franchise User":
+            error_message = "You are not authorized to access this resource."
+            frappe.throw(error_message, title="Unauthorized Access")
+
+        user_slot = frappe.get_doc("User Slot", {"user": frappe.session.user})
+
+        if not user_slot:
+            error_message = "Sorry, there are no available slots for the current user."
+            frappe.throw(error_message, title="No Slot Found")
+
+        data = {"success": True, "data": user_slot.as_dict()}
 
         return Response(
             json.dumps(data, cls=helper.CustomJSONEncoder),
