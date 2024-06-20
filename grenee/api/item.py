@@ -30,7 +30,7 @@ def all_categories():
 @frappe.whitelist()
 def all_items():
     try:
-        items = frappe.get_list("Item", fields=["*"])
+        items = frappe.get_list("Item", filters={"disabled": False}, fields=["*"])
 
         data = {
             "success": True,
@@ -50,7 +50,10 @@ def all_items():
 @frappe.whitelist()
 def get_items(filters=None):
     try:
-        filters_dict = frappe.parse_json(filters) if filters else {}
+        filters_dict = {"disabled": False}
+        if filters:
+            parsed_filters = frappe.parse_json(filters)
+            filters_dict.update(parsed_filters)
 
         items = frappe.get_list("Item", filters=filters_dict, fields=["*"])
 

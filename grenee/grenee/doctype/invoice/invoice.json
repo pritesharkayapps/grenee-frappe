@@ -38,6 +38,7 @@
    "fieldtype": "Table",
    "label": "Invoice Items",
    "options": "Invoice Items",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -79,6 +80,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "Now",
    "fieldname": "invoice_date_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
@@ -100,7 +102,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-06-06 17:04:02.467629",
+ "modified": "2024-06-20 15:23:25.009197",
  "modified_by": "Administrator",
  "module": "Grenee",
  "name": "Invoice",

@@ -11,8 +11,6 @@ def place_order(**kwargs):
     payload = frappe.parse_json(kwargs)
 
     try:
-        # frappe.throw("ORDER SLOTS CLOSED")
-
         user_slot = frappe.get_value(
             "User Slot",
             {"user": frappe.session.user},

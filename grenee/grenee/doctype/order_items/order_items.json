@@ -24,7 +24,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Item",
-   "link_filters": "[[\"Item\",\"category\",\"=\",\"eval:doc.category\"]]",
+   "link_filters": "[[\"Item\",\"category\",\"=\",\"eval:doc.category\"],[\"Item\",\"disabled\",\"=\",0]]",
    "options": "Item",
    "reqd": 1
   },
@@ -43,6 +43,8 @@
   {
    "allow_on_submit": 1,
    "columns": 1,
+   "fetch_from": "item.min_qty",
+   "fetch_if_empty": 1,
    "fieldname": "ordered_qty",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -121,7 +123,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-06-11 10:21:50.904754",
+ "modified": "2024-06-20 14:54:14.843875",
  "modified_by": "Administrator",
  "module": "Grenee",
  "name": "Order Items",

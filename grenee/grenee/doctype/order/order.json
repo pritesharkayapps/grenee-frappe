@@ -9,11 +9,13 @@
   "section_break_mb1g",
   "user",
   "franchise_name",
+  "naming_series",
+  "column_break_eneu",
   "order_date_time",
+  "section_break_sfrq",
   "order_items",
   "total_amount",
-  "amended_from",
-  "naming_series"
+  "amended_from"
  ],
  "fields": [
   {
@@ -52,6 +54,7 @@
    "in_list_view": 1,
    "label": "Total Amount",
    "non_negative": 1,
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -75,6 +78,14 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Naming Series"
+  },
+  {
+   "fieldname": "column_break_eneu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_sfrq",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -85,7 +96,7 @@
    "link_fieldname": "order"
   }
  ],
- "modified": "2024-06-11 17:56:21.326756",
+ "modified": "2024-06-20 14:54:24.382741",
  "modified_by": "Administrator",
  "module": "Grenee",
  "name": "Order",
